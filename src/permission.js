@@ -10,11 +10,16 @@ import 'nprogress/nprogress.css'
 // white list
 const whiteList = ['/login', '/404']
 // front route guard
-router.beforeEach(function(to, from, next) {
+router.beforeEach(async function(to, from, next) {
   // enable the progress bar
   nProgress.start()
   // is there a token
   if (store.getters.token) {
+    // check whether vuex has a user ID
+    if (!store.getters.userId) {
+      // obtaining user information
+      await store.dispatch('user/getUserInfo')
+    }
     // is it on the login page
     if (to.path === '/login') {
       // jump to home page
