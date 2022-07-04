@@ -12,10 +12,10 @@
       >
         <div class="avatar-wrapper">
           <img
-            src="@/assets/common/bigUserHeader.png"
+            :src="staffPhoto"
             class="user-avatar"
           >
-          <span class="name">管理员</span>
+          <span class="name">{{ name }}</span>
           <i
             class="el-icon-caret-bottom"
             style="color:#fff"
@@ -57,7 +57,9 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name',
+      'staffPhoto'
     ])
   },
   methods: {

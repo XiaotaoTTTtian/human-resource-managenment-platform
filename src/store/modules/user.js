@@ -1,5 +1,5 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, getUserPhotoById } from '@/api/user'
 // state
 const state = {
   // example set the initial token information
@@ -40,9 +40,14 @@ const actions = {
   },
   // obtaining user information
   async getUserInfo (context) {
+    // obtain basic user information
     const result = await getUserInfo()
-    context.commit('setUserInfo', result)
-    return result
+    // obtain user photo
+    const baseInfo = await getUserPhotoById(result.userId)
+    // data merge
+    const baseResult = { ...result, ...baseInfo }
+    context.commit('setUserInfo', baseResult)
+    return baseResult
   }
 }
 export default {
