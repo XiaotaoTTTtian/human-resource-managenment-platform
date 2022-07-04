@@ -8,9 +8,12 @@ export function login(data) {
     data
   })
 }
-
-export function getInfo(token) {
-
+// obtaining user information
+export function getUserInfo() {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
 }
 
 export function logout() {

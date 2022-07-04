@@ -1,9 +1,11 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 // state
 const state = {
   // example set the initial token information
-  token: getToken()
+  token: getToken(),
+  // user information
+  userInfo: {}
 }
 // modify the state
 const mutations = {
@@ -19,6 +21,14 @@ const mutations = {
     state.token = null
     // clear cache
     removeToken()
+  },
+  // set user information
+  setUserInfo(state, result) {
+    state.userInfo = result
+  },
+  // delete user information
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 // execute asynchronous
@@ -27,6 +37,12 @@ const actions = {
     const result = await login(data)
     // the result is actually the token after the response interceptor processing
     context.commit('setToken', result)
+  },
+  // obtaining user information
+  async getUserInfo (context) {
+    const result = await getUserInfo()
+    context.commit('setUserInfo', result)
+    return result
   }
 }
 export default {
