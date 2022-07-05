@@ -33,6 +33,7 @@ const mutations = {
 }
 // execute asynchronous
 const actions = {
+  // register
   async login(context, data) {
     const result = await login(data)
     // the result is actually the token after the response interceptor processing
@@ -48,6 +49,13 @@ const actions = {
     const baseResult = { ...result, ...baseInfo }
     context.commit('setUserInfo', baseResult)
     return baseResult
+  },
+  // log out
+  logout(context) {
+    // delete token
+    context.commit('removeToken')
+    // delete user information
+    context.commit('removeUserInfo')
   }
 }
 export default {

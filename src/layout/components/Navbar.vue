@@ -41,7 +41,10 @@
             divided
             @click.native="logout"
           >
-            <span style="display:block;">退出登录</span>
+            <span
+              style="display:block;"
+              @click="logout"
+            >退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -67,9 +70,12 @@ export default {
     toggleSideBar () {
       this.$store.dispatch('app/toggleSideBar')
     },
+    // log out
     async logout () {
+      // clearing user information
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // return to login page
+      this.$router.push('/login')
     }
   },
   data () {

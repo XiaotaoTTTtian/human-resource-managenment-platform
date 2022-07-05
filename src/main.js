@@ -11,8 +11,6 @@ import * as directives from '@/directives'
 // irerate over all exported instruction object
 // Object.keys return an enumerbale array object
 Object.keys(directives).forEach(key => {
-  console.log(key)
-  console.log(directives[key])
   // register custom events
   Vue.directive(key, directives[key])
 })
