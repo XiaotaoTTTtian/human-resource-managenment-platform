@@ -205,6 +205,9 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+  .el-form-item__error {
+    color: #fff;
+  }
   .el-form {
     .loginBtn {
       background: #407ffe;

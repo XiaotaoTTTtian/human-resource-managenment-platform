@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserPhotoById } from '@/api/user'
 // state
 const state = {
@@ -38,6 +38,8 @@ const actions = {
     const result = await login(data)
     // the result is actually the token after the response interceptor processing
     context.commit('setToken', result)
+    // reset the timestamp
+    setTimeStamp()
   },
   // obtaining user information
   async getUserInfo (context) {
