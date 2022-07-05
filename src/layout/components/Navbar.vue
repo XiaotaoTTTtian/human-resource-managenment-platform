@@ -12,6 +12,7 @@
       >
         <div class="avatar-wrapper">
           <img
+            v-imageerror="defaultImg"
             :src="staffPhoto"
             class="user-avatar"
           >
@@ -69,6 +70,11 @@ export default {
     async logout () {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    }
+  },
+  data () {
+    return {
+      defaultImg: require('../../assets/common/head.jpg')
     }
   }
 }

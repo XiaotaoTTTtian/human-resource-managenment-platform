@@ -7,6 +7,15 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import * as directives from '@/directives'
+// irerate over all exported instruction object
+// Object.keys return an enumerbale array object
+Object.keys(directives).forEach(key => {
+  console.log(key)
+  console.log(directives[key])
+  // register custom events
+  Vue.directive(key, directives[key])
+})
 
 import App from './App'
 import store from './store'
