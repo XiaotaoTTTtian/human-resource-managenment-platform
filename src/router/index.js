@@ -1,5 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import approvals from './modules/approvals'
+import attendances from './modules/attendances'
+import departments from './modules/departments'
+import employees from './modules/employees'
+import permission from './modules/permission'
+import salarys from './modules/salarys'
+import setting from './modules/setting'
+import social from './modules/social'
 
 Vue.use(Router)
 
@@ -57,11 +65,23 @@ export const constantRoutes = [
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
+// dynamic routing
+export const asyncRoutes = [
+  approvals,
+  attendances,
+  departments,
+  employees,
+  permission,
+  salarys,
+  setting,
+  social
+]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  // merge all routes
+  routes: [...constantRoutes, ...asyncRoutes]
 })
 
 const router = createRouter()
