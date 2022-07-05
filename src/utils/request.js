@@ -15,7 +15,6 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(config => {
   if (store.getters.token) {
-    console.log(store.getters.token)
     // if the timeout
     if (IsCheckTimeOut()) {
       // log out
@@ -46,8 +45,16 @@ service.interceptors.response.use(response => {
     return Promise.reject(new Error(message))
   }
 }, error => {
-  // failure return an error message
-  Message.error(error.message)
+  // determine whether timeout occurs
+  if (error.response && error.response.data && error.response.data.code === 10002) {
+    // delete token
+    store.dispatch('user/logout')
+    // return login page
+    router.push('/login')
+  } else {
+    // failure return an error message
+    Message.error(error.message)
+  }
   return Promise.reject(error)
 }
 )
