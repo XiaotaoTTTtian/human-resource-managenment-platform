@@ -12,7 +12,8 @@ export default {
     component: () => import('@/views/employees'),
     // routing meta information -- store data onject
     meta: {
-      title: '员工管理'
+      title: '员工管理',
+      icon: 'people'
     }
   }]
 }
