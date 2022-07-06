@@ -29,6 +29,7 @@
 <script>
 import treeTool from '../components/tree-tools.vue'
 import { getDepartments } from '@/api/departments'
+import { tranListToTreeData } from '@/utils/index'
 export default {
   name: 'OrganizationalStructure',
   components: {
@@ -37,7 +38,7 @@ export default {
   props: {},
   data () {
     return {
-      company: { name: '江苏传智播客教育科技股份有限公司', manager: '负责人' },
+      company: {},
       defaultProps: {
         label: 'name'
       },
@@ -47,13 +48,17 @@ export default {
   computed: {},
   watch: {},
   created () {
+    // obtain organizational architecture data
     this.getDepartments()
   },
   mounted () { },
   methods: {
     async getDepartments () {
-      const { depts } = await getDepartments()
-      this.departs = depts
+      const result = await getDepartments()
+      // save data
+      // tranListToTreeData converts the array data into a tree structure
+      this.departs = tranListToTreeData(result.depts, '')
+      this.company = { name: result.companyName, manager: '负责人' }
     }
   }
 }

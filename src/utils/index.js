@@ -115,3 +115,26 @@ export function param2Obj(url) {
   })
   return obj
 }
+/**
+ * transform array data into a tree structure
+ * @param {Array} time
+ * @param {string} cFormat
+ * @returns {Array}
+ */
+export function tranListToTreeData(list, rootValue) {
+  const arr = []
+  list.forEach(item => {
+    // determines whether the value exists in the object
+    if (item.pid === rootValue) {
+      // check whether there are child nodes
+      const children = tranListToTreeData(list, item.id)
+      // if the length of children is greater than zero,the child node is found
+      if (children.length) {
+        item.children = children
+      }
+      // add those that meet the criteria to the arrar
+      arr.push(item)
+    }
+  })
+  return arr
+}
