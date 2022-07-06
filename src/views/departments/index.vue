@@ -28,6 +28,7 @@
 
 <script>
 import treeTool from '../components/tree-tools.vue'
+import { getDepartments } from '@/api/departments'
 export default {
   name: 'OrganizationalStructure',
   components: {
@@ -40,14 +41,21 @@ export default {
       defaultProps: {
         label: 'name'
       },
-      departs: [{ name: '总裁办', manager: '曹操', children: [{ name: '董事会', manager: '曹丕' }] }, { name: '行政部', manager: '刘备' }, { name: '人事部', manager: '孙权' }]
+      departs: []
     }
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    this.getDepartments()
+  },
   mounted () { },
-  methods: {}
+  methods: {
+    async getDepartments () {
+      const { depts } = await getDepartments()
+      this.departs = depts
+    }
+  }
 }
 </script>
 
