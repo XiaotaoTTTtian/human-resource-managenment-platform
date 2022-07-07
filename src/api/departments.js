@@ -12,7 +12,7 @@ export function deleteDepartmentById(id) {
     method: 'DELETE'
   })
 }
-// the new department
+// adding a new department
 export function addDepartment(data) {
   return request({
     url: '/company/department',

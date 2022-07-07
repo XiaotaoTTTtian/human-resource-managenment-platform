@@ -1,6 +1,7 @@
 <template>
   <!-- 新增部门的弹层 -->
   <el-dialog
+    v-if="value"
     title="新增部门"
     :visible="value"
     :before-close="handleClose"
@@ -8,6 +9,7 @@
     <!-- 表单组件  el-form   label-width设置label的宽度   -->
     <!-- 匿名插槽 -->
     <el-form
+      ref="deptForm"
       label-width="120px"
       :model="formData"
       :rules="rules"
@@ -72,7 +74,7 @@
       <el-col :span="6">
         <el-button
           size="small"
-          @click="$emit('input', false)"
+          @click="onCancel"
         >取消</el-button>
         <el-button
           type="primary"
@@ -86,7 +88,7 @@
 </template>
 
 <script>
-import { getDepartments } from '@/api/departments'
+import { getDepartments, addDepartment } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
@@ -139,17 +141,32 @@ export default {
   computed: {},
   watch: {},
   created () {
+    // get a simple list of employees
     this.getEmployeesSimple()
   },
   mounted () { },
   methods: {
+    // ack button
     onConfirm () {
-      console.log('confirm')
-      this.$emit('input', false)
+      this.$refs.deptForm.validate(async isOk => {
+        // if the manual check succeeds,so isok is a boolean value of true
+        if (isOk) {
+          // send add request
+          await addDepartment({ ...this.formData, pid: this.treeNodeId })
+          this.$emit('addDepts')
+          this.$emit('input', false)
+          this.$refs.deptForm.resetFields()
+        }
+      })
     },
+    // close button
     handleClose () {
-      console.log('close')
       this.$emit('input', false)
+      this.$refs.deptForm.resetFields()
+    },
+    onCancel () {
+      this.$emit('input', false)
+      this.$refs.deptForm.resetFields()
     },
     async getEmployeesSimple () {
       this.peoples = await getEmployeeSimple()

@@ -28,6 +28,7 @@
     <add-dept
       v-model="isShowAddPartment"
       :tree-node-id="tempTreeToolId"
+      @addDepts="getDepartments"
     />
   </div>
 </template>
