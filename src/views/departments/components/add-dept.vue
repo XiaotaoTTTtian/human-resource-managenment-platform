@@ -40,7 +40,14 @@
           v-model="formData.manager"
           style="width:80%"
           placeholder="请选择"
-        />
+        >
+          <el-option
+            v-for="item in peoples"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item
         label="部门介绍"
@@ -64,14 +71,15 @@
       <!-- 列被分为24 -->
       <el-col :span="6">
         <el-button
+          size="small"
+          @click="$emit('input', false)"
+        >取消</el-button>
+        <el-button
           type="primary"
           size="small"
           @click="onConfirm"
         >确定</el-button>
-        <el-button
-          size="small"
-          @click="$emit('input', false)"
-        >取消</el-button>
+
       </el-col>
     </el-row>
   </el-dialog>
@@ -79,6 +87,7 @@
 
 <script>
 import { getDepartments } from '@/api/departments'
+import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
   components: {},
@@ -117,17 +126,21 @@ export default {
         manager: '', // department manager
         introduce: '' // department introduce
       },
+      // list of form rules
       rules: {
         name: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }, { min: 1, max: 50, message: '部门名称要求1-50个字符', trigger: 'blur' }, { trigger: 'blur', validator: checkNameRepeat }],
         code: [{ required: true, message: '部门编码不能为空', trigger: 'blur' }, { min: 1, max: 50, message: '部门编码要求1-50个字符', trigger: 'blur' }, { trigger: 'blur', validator: chenkCodeRepeat }],
         manager: [{ required: true, message: '部门负责人不能为空', trigger: 'blur' }],
         introduce: [{ required: true, message: '部门介绍不能为空', trigger: 'blur' }, { trigger: 'blur', min: 1, max: 300, message: '部门介绍要求1-300个字符' }]
-      }
+      },
+      peoples: []
     }
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    this.getEmployeesSimple()
+  },
   mounted () { },
   methods: {
     onConfirm () {
@@ -137,6 +150,9 @@ export default {
     handleClose () {
       console.log('close')
       this.$emit('input', false)
+    },
+    async getEmployeesSimple () {
+      this.peoples = await getEmployeeSimple()
     }
   }
 }
