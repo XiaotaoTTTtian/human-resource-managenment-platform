@@ -25,7 +25,10 @@
         />
       </el-tree>
     </el-card>
-    <add-dept v-model="isShowAddPartment" />
+    <add-dept
+      v-model="isShowAddPartment"
+      :tree-node-id="tempTreeToolId"
+    />
   </div>
 </template>
 
@@ -65,7 +68,7 @@ export default {
       // save data
       // tranListToTreeData converts the array data into a tree structure
       this.departs = tranListToTreeData(result.depts, '')
-      this.company = { name: result.companyName, manager: '负责人' }
+      this.company = { name: result.companyName, manager: '负责人', id: '' }
     },
     // delete partment
     delPartmentFn (id) {
@@ -76,7 +79,8 @@ export default {
     },
     // add partment
     onAddPartment (id) {
-      console.log(id)
+      this.tempTreeToolId = id
+      this.isShowAddPartment = true
     }
 
   }
