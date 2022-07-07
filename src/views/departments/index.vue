@@ -20,21 +20,25 @@
         <tree-tool
           slot-scope="{ data }"
           :tree-node="data"
-          @treeToolId="treeToolIdFn"
+          @delPartment="delPartmentFn"
+          @addPartment="onAddPartment"
         />
       </el-tree>
     </el-card>
+    <add-dept v-model="isShowAddPartment" />
   </div>
 </template>
 
 <script>
 import treeTool from '../components/tree-tools.vue'
+import addDept from './components/add-dept.vue'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData, filterArray } from '@/utils/index'
 export default {
   name: 'OrganizationalStructure',
   components: {
-    treeTool
+    treeTool,
+    addDept
   },
   props: {},
   data () {
@@ -44,7 +48,8 @@ export default {
         label: 'name'
       },
       departs: [],
-      tempTreeToolId: ''
+      tempTreeToolId: '',
+      isShowAddPartment: false
     }
   },
   computed: {},
@@ -62,11 +67,16 @@ export default {
       this.departs = tranListToTreeData(result.depts, '')
       this.company = { name: result.companyName, manager: '负责人' }
     },
-    treeToolIdFn (id) {
+    // delete partment
+    delPartmentFn (id) {
       console.log('treeTool')
       this.tempTreeToolId = id
       filterArray(this.departs, this.tempTreeToolId)
       this.tempTreeToolId = ''
+    },
+    // add partment
+    onAddPartment (id) {
+      console.log(id)
     }
 
   }

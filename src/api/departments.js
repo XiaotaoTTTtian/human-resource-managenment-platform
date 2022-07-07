@@ -12,3 +12,11 @@ export function deleteDepartmentById(id) {
     method: 'DELETE'
   })
 }
+// the new department
+export function addDepartment(data) {
+  return request({
+    url: '/company/department',
+    method: 'POST',
+    data
+  })
+}

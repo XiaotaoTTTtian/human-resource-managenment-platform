@@ -72,6 +72,7 @@ export default {
     handleCommand (command) {
       if (command === 'add') {
         console.log('add')
+        this.$emit('addPartment', this.treeNode.id)
       } else if (command === 'edit') {
         console.log('edit')
       } else {
@@ -82,7 +83,7 @@ export default {
           type: 'warning'
         }).then(async () => {
           await deleteDepartmentById(this.treeNode.id)
-          this.$emit('treeToolId', this.treeNode.id)
+          this.$emit('delPartment', this.treeNode.id)
           Message({
             type: 'success',
             message: '删除成功!'
