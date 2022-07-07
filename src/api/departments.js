@@ -5,3 +5,10 @@ export function getDepartments() {
     url: '/company/department'
   })
 }
+// delete a department based on its ID
+export function deleteDepartmentById(id) {
+  return request({
+    url: `/company/department/${id}`,
+    method: 'DELETE'
+  })
+}

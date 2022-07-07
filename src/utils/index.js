@@ -138,3 +138,14 @@ export function tranListToTreeData(list, rootValue) {
   })
   return arr
 }
+// filter the eligible data in a multi-tier array
+export function filterArray(list, id) {
+  list.forEach((item, index) => {
+    if (item.id === id) {
+      list.splice(index, 1)
+    }
+    if (item.children) {
+      filterArray(item.children, id)
+    }
+  })
+}

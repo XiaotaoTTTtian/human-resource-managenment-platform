@@ -20,6 +20,7 @@
         <tree-tool
           slot-scope="{ data }"
           :tree-node="data"
+          @treeToolId="treeToolIdFn"
         />
       </el-tree>
     </el-card>
@@ -29,7 +30,7 @@
 <script>
 import treeTool from '../components/tree-tools.vue'
 import { getDepartments } from '@/api/departments'
-import { tranListToTreeData } from '@/utils/index'
+import { tranListToTreeData, filterArray } from '@/utils/index'
 export default {
   name: 'OrganizationalStructure',
   components: {
@@ -42,7 +43,8 @@ export default {
       defaultProps: {
         label: 'name'
       },
-      departs: []
+      departs: [],
+      tempTreeToolId: ''
     }
   },
   computed: {},
@@ -59,7 +61,14 @@ export default {
       // tranListToTreeData converts the array data into a tree structure
       this.departs = tranListToTreeData(result.depts, '')
       this.company = { name: result.companyName, manager: '负责人' }
+    },
+    treeToolIdFn (id) {
+      console.log('treeTool')
+      this.tempTreeToolId = id
+      filterArray(this.departs, this.tempTreeToolId)
+      this.tempTreeToolId = ''
     }
+
   }
 }
 </script>
