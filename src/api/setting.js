@@ -20,6 +20,20 @@ export function deleteRole(id) {
     method: 'delete'
   })
 }
+// edit role
+export function updateRole(data) {
+  return request({
+    url: `/sys/role/${data.id}`,
+    method: 'put',
+    data
+  })
+}
+// obtaining role details
+export function getRoleDetail(id) {
+  return request({
+    url: `/sys/role/${id}`
+  })
+}
 // new role functions
 export function addRole(data) {
   return request({

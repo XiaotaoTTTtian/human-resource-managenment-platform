@@ -43,6 +43,7 @@
                   <el-button
                     size="small"
                     type="primary"
+                    @click="editRole(row.id)"
                   >编辑</el-button>
                   <el-button
                     size="small"
@@ -112,8 +113,47 @@
               </el-form-item>
             </el-form>
           </el-tab-pane>
-
         </el-tabs>
+        <el-dialog
+          title="编辑弹层"
+          :visible="showDialog"
+          @close="showDialog=false"
+        >
+          <el-form
+            ref="roleForm"
+            :model="roleForm"
+            :rules="rules"
+            label-width="120px"
+          >
+            <el-form-item
+              label="角色名称"
+              prop="name"
+            >
+              <el-input v-model="roleForm.name" />
+            </el-form-item>
+            <el-form-item label="角色描述">
+              <el-input v-model="roleForm.description" />
+            </el-form-item>
+          </el-form>
+          <!-- 底部 -->
+          <el-row
+            slot="footer"
+            type="flex"
+            justify="center"
+          >
+            <el-col :span="6">
+              <el-button
+                size="small"
+                @click="showDialog=false"
+              >取消</el-button>
+              <el-button
+                size="small"
+                type="primary"
+                @click="editConfirm"
+              >确定</el-button>
+            </el-col>
+          </el-row>
+        </el-dialog>
       </el-card>
     </div>
     <button @click="addRoleFn">测试</button>
@@ -122,7 +162,7 @@
 </template>
 
 <script>
-import { getRoleList, addRole, getCompanyInfo, deleteRole } from '@/api/setting'
+import { getRoleList, addRole, getCompanyInfo, deleteRole, getRoleDetail, updateRole } from '@/api/setting'
 export default {
   name: 'CompanySet',
   components: {},
@@ -135,7 +175,12 @@ export default {
         pagesize: 10, // displays the number of entries per page
         total: 0 // sum
       },
-      formData: {}
+      formData: {},
+      showDialog: false,
+      roleForm: {},
+      rules: {
+        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }]
+      }
     }
   },
   computed: {},
@@ -143,6 +188,7 @@ export default {
   created () {
     // get the list of roles
     this.getRoleList()
+    // get company information
     this.getCompanyInfo()
   },
   mounted () { },
@@ -196,6 +242,23 @@ export default {
         this.$message.success('删除角色成功')
       } catch (error) {
         console.log(error)
+      }
+    },
+    async editRole (id) {
+      this.showDialog = true
+      // get employee information based on id
+      const result = await getRoleDetail(id)
+      this.roleForm = result
+    },
+    // edit role
+    async editConfirm () {
+      try {
+        await this.$refs.roleForm.validate()
+        await updateRole(this.roleForm)
+        this.getRoleList()
+        this.showDialog = false
+      } catch (error) {
+        this.$message.error('编辑失败')
       }
     }
   }
