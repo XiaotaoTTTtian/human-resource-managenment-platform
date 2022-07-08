@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getDepartments, addDepartment, getDepartmentById } from '@/api/departments'
+import { getDepartments, addDepartment, getDepartmentById, updateDepartments } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
@@ -110,15 +110,30 @@ export default {
     const checkNameRepeat = async (rule, value, callback) => {
       // request the latest organizational structure data
       const { depts } = await getDepartments()
-      const isRepeat = depts.filter(item => item.pid === this.treeNodeId).some(item => item.name === value)
+      let isRepeat = false
+      if (this.formData.id) {
+        // ensure that there are no duplicate ids
+        isRepeat = depts.filter(item => item.id !== this.treeNodeId && item.pid === this.treeNodeId).some(item => item.name === value)
+      } else {
+        // check whether the current ID equals the parent ID
+        // some -- with the department of,are there duplicate department names
+        isRepeat = depts.filter(item => item.pid === this.treeNodeId).some(item => item.name === value)
+      }
       isRepeat ? callback(new Error(`同级部门下已经有${value}的部门了`)) : callback()
     }
     // check for duplicate department codes
     const chenkCodeRepeat = async (rule, value, callback) => {
       // request the latest organizational structure data
       const { depts } = await getDepartments()
-      // adding a value is not null,because some departments may not have a code
-      const isRepeat = depts.some(item => item.code === value && value)
+      let isRepeat = false
+      if (this.formData.id) {
+        // check whether the ID already exists
+        isRepeat = depts.some(item => item.id !== this.treeNodeId && item.code === value && value)
+      } else {
+        // adding a value is not null,because some departments may not have a code
+        isRepeat = depts.some(item => item.code === value && value)
+      }
+
       isRepeat ? callback(new Error(`组织架构中已经有部门使用${value}编码`)) : callback()
     }
     return {
@@ -155,10 +170,17 @@ export default {
       this.$refs.deptForm.validate(async isOk => {
         // if the manual check succeeds,so isok is a boolean value of true
         if (isOk) {
-          // send add request
-          await addDepartment({ ...this.formData, pid: this.treeNodeId })
+          if (this.formData.id) {
+            await updateDepartments(this.formData)
+          } else {
+            // send add request
+            await addDepartment({ ...this.formData, pid: this.treeNodeId })
+          }
+          // refresh the page and uodate the data
           this.$emit('addDepts')
+          // close the layer thickness
           this.$emit('input', false)
+          // reset the form
           this.$refs.deptForm.resetFields()
         }
       })
