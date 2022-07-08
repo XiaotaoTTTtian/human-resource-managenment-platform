@@ -14,16 +14,26 @@
               >新增角色</el-button>
             </el-row>
             <!-- 表格 -->
-            <el-table border="">
+            <el-table
+              border=""
+              :data="list"
+            >
               <el-table-column
                 label="序号"
                 width="120"
+                align="center"
+                type="index"
               />
               <el-table-column
                 label="角色名称"
                 width="240"
+                align="center"
+                prop="name"
               />
-              <el-table-column label="描述" />
+              <el-table-column
+                label="描述"
+                prop="description"
+              />
               <el-table-column label="操作">
                 <el-button
                   size="small"
@@ -47,7 +57,13 @@
               style="height: 60px"
             >
               <!-- 分页组件 -->
-              <el-pagination layout="prev,pager,next" />
+              <el-pagination
+                layout="prev,pager,next"
+                :current-page="page.page"
+                :page-sizes="page.pageSize"
+                :total="page.total"
+                @current-change="changePage"
+              />
             </el-row>
           </el-tab-pane>
           <el-tab-pane label="公司信息">
@@ -93,24 +109,59 @@
         </el-tabs>
       </el-card>
     </div>
+    <button @click="addRoleFn">测试</button>
   </div>
 </template>
 
 <script>
+import { getRoleList, addRole } from '@/api/setting'
 export default {
   name: 'CompanySet',
   components: {},
   props: {},
   data () {
     return {
-
+      list: [],
+      page: {
+        page: 1, // the current page number
+        pagesize: 5, // displays the number of entries per page
+        total: 0 // sum
+      }
     }
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    // get the list of roles
+    this.getRoleList()
+  },
   mounted () { },
-  methods: {}
+  methods: {
+    // get the list of roles
+    async getRoleList () {
+      const { total, rows } = await getRoleList(this.page)
+      this.page.total = total
+      this.list = rows
+    },
+    changePage (newPage) {
+      console.log('change')
+      this.page.page = newPage
+      this.getRoleList()
+    },
+    addRoleFn () {
+      for (let i = 0; i < 100; i++) {
+        addRole({
+          name: '测试，不要删除',
+          description: '00000'
+        }).then(res => {
+          console.log(res)
+          console.log('add')
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    }
+  }
 }
 </script>
 
