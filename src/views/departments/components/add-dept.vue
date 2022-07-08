@@ -2,7 +2,7 @@
   <!-- 新增部门的弹层 -->
   <el-dialog
     v-if="value"
-    title="新增部门"
+    :title="showTitle"
     :visible="value"
     :before-close="handleClose"
   >
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getDepartments, addDepartment } from '@/api/departments'
+import { getDepartments, addDepartment, getDepartmentById } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   name: 'AddDept',
@@ -138,7 +138,11 @@ export default {
       peoples: []
     }
   },
-  computed: {},
+  computed: {
+    showTitle () {
+      return this.formData.id ? '编辑部门' : '新增子部门'
+    }
+  },
   watch: {},
   created () {
     // get a simple list of employees
@@ -170,6 +174,9 @@ export default {
     },
     async getEmployeesSimple () {
       this.peoples = await getEmployeeSimple()
+    },
+    async getDepartDetail (id) {
+      this.formData = await getDepartmentById(id)
     }
   }
 }

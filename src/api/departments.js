@@ -20,3 +20,9 @@ export function addDepartment(data) {
     data
   })
 }
+// query department details by ID
+export function getDepartmentById(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}

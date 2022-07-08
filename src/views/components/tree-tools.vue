@@ -74,7 +74,7 @@ export default {
         console.log('add')
         this.$emit('addPartment', this.treeNode.id)
       } else if (command === 'edit') {
-        console.log('edit')
+        this.$emit('editPartment', this.treeNode.id)
       } else {
         // delete a department based on its ID
         this.$confirm('确定删除这个部门吗', {

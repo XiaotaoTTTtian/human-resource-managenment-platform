@@ -22,11 +22,18 @@
           :tree-node="data"
           @delPartment="delPartmentFn"
           @addPartment="onAddPartment"
+          @editPartment="onEditPartment"
         />
       </el-tree>
     </el-card>
     <add-dept
       v-model="isShowAddPartment"
+      :tree-node-id="tempTreeToolId"
+      @addDepts="getDepartments"
+    />
+    <add-dept
+      ref="addDept"
+      v-model="isShowEditPartment"
       :tree-node-id="tempTreeToolId"
       @addDepts="getDepartments"
     />
@@ -53,7 +60,8 @@ export default {
       },
       departs: [],
       tempTreeToolId: '',
-      isShowAddPartment: false
+      isShowAddPartment: false,
+      isShowEditPartment: false
     }
   },
   computed: {},
@@ -71,17 +79,26 @@ export default {
       this.departs = tranListToTreeData(result.depts, '')
       this.company = { name: result.companyName, manager: '负责人', id: '' }
     },
-    // delete partment
+    // delete department
     delPartmentFn (id) {
       console.log('treeTool')
       this.tempTreeToolId = id
       filterArray(this.departs, this.tempTreeToolId)
       this.tempTreeToolId = ''
     },
-    // add partment
+    // add department
     onAddPartment (id) {
       this.tempTreeToolId = id
       this.isShowAddPartment = true
+    },
+    // edit department
+    onEditPartment (id) {
+      // is is stored in atemporary variable
+      this.tempTreeToolId = id
+      // display pop-up layer
+      this.isShowEditPartment = true
+      // call child component methods directly
+      this.$refs.addDept.getDepartDetail(id)
     }
 
   }
