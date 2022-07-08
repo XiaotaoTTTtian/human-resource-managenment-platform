@@ -7,6 +7,19 @@ export function getRoleList(params) {
     params
   })
 }
+// get company information
+export function getCompanyInfo(companyId) {
+  return request({
+    url: `/company/${companyId}`
+  })
+}
+// deleting a role
+export function deleteRole(id) {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'delete'
+  })
+}
 // new role functions
 export function addRole(data) {
   return request({
