@@ -18,6 +18,9 @@ Object.keys(directives).forEach(key => {
 import App from './App'
 import store from './store'
 import router from './router'
+import Component from '@/components'
+// global identical registration
+Vue.use(Component)
 
 import '@/icons' // icon
 import '@/permission' // permission control
