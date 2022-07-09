@@ -14,6 +14,12 @@ Object.keys(directives).forEach(key => {
   // register custom events
   Vue.directive(key, directives[key])
 })
+// filter
+import * as filters from '@/filters'
+// global registration filter
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 import App from './App'
 import store from './store'
