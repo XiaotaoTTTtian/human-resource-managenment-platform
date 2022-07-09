@@ -11,6 +11,7 @@
                 icon="el-icon-plus"
                 size="small"
                 type="primary"
+                @click="showDialog = true"
               >新增角色</el-button>
             </el-row>
             <!-- 表格 -->
@@ -115,7 +116,7 @@
           </el-tab-pane>
         </el-tabs>
         <el-dialog
-          title="编辑弹层"
+          :title="isEditTitle"
           :visible="showDialog"
           @close="showDialog=false"
         >
@@ -131,7 +132,10 @@
             >
               <el-input v-model="roleForm.name" />
             </el-form-item>
-            <el-form-item label="角色描述">
+            <el-form-item
+              label="角色描述"
+              prop="description"
+            >
               <el-input v-model="roleForm.description" />
             </el-form-item>
           </el-form>
@@ -183,8 +187,21 @@ export default {
       }
     }
   },
-  computed: {},
-  watch: {},
+  computed: {
+    isEditTitle () {
+      return this.roleForm.id ? '编辑角色' : '新增角色'
+    }
+  },
+  watch: {
+    // reset the form when shell are closed
+    showDialog: {
+      handler (val) {
+        if (val === false) {
+          this.roleForm = {}
+        }
+      }
+    }
+  },
   created () {
     // get the list of roles
     this.getRoleList()
@@ -253,9 +270,17 @@ export default {
     // edit role
     async editConfirm () {
       try {
+        // ckeck list
         await this.$refs.roleForm.validate()
-        await updateRole(this.roleForm)
+        if (this.roleForm.id) {
+          // edir role
+          await updateRole(this.roleForm)
+        } else {
+          await addRole(this.roleForm)
+        }
+        // retrieve data
         this.getRoleList()
+        // close the layer thickness
         this.showDialog = false
       } catch (error) {
         this.$message.error('编辑失败')
