@@ -12,6 +12,13 @@ export function getEmployeeList(params) {
     params
   })
 }
+// deleting an employee interface
+export function delEmployee(id) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'delete'
+  })
+}
 // the new employee
 export function addEmployee(data) {
   return request({

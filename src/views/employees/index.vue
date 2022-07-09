@@ -14,6 +14,7 @@
         <el-button
           size="small"
           type="primary"
+          @click="isShowDialog=true"
         >新增员工</el-button>
       </template>
     </page-tools>
@@ -72,7 +73,7 @@
           fixed="right"
           width="280"
         >
-          <template>
+          <template slot-scope="{ row }">
             <el-button
               type="text"
               size="small"
@@ -96,6 +97,7 @@
             <el-button
               type="text"
               size="small"
+              @click="deleteEmployee(row.id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -116,17 +118,22 @@
         />
       </el-row>
     </el-card>
+    <!-- new employee pop-up layer -->
+    <AddEmployee v-model="isShowDialog" />
     <button @click="addEmployees">新增员工</button>
     <button @click="stopFn">停止</button>
   </div>
 </template>
 
 <script>
-import { getEmployeeList, addEmployee } from '@/api/employees'
+import { getEmployeeList, addEmployee, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
+import AddEmployee from './components/add-employee.vue'
 export default {
   name: 'Employee',
-  components: {},
+  components: {
+    AddEmployee
+  },
   props: {},
   data () {
     return {
@@ -136,7 +143,8 @@ export default {
         page: 1,
         size: 10,
         total: 0
-      }
+      },
+      isShowDialog: false
     }
   },
   computed: {},
@@ -191,6 +199,28 @@ export default {
         return flag
       })
       return obj ? obj.value : '未知'
+    },
+    // delete staff
+    deleteEmployee (id) {
+      this.$confirm('此操作将永久删除角色信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        // sending a delete request
+        await delEmployee(id)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        // update the view
+        this.getEmployeeList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
