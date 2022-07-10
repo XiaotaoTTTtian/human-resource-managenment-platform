@@ -11,6 +11,7 @@
         <el-button
           size="small"
           type="danger"
+          @click="exportData"
         >导出</el-button>
         <el-button
           size="small"
@@ -128,6 +129,7 @@
 
 <script>
 import { getEmployeeList, addEmployee, delEmployee } from '@/api/employees'
+import { formatDate } from '@/filters'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee.vue'
 export default {
@@ -175,7 +177,7 @@ export default {
       this.time = setInterval(() => {
         this.num++
         addEmployee({
-          username: '金州勇士',
+          username: '张金金',
           mobile: '18505833819',
           formOfEmployment: 3,
           workNumber: '88' + this.num,
@@ -220,6 +222,53 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
+        })
+      })
+    },
+    // exporting excel data
+    exportData () {
+      // table header mapping
+      const headers = {
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+      }
+      // lazy loading
+      import('@/vendor/Export2Excel').then(async excel => {
+        // this.page.total -- the purpose is to query all employee lists at one time
+        const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
+        const data = this.formatJson(headers, rows)
+        // complex table header export
+        const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']]
+        const merges = ['A1:A2', 'B1:F1', 'G1:G2']
+        excel.export_json_to_excel({
+          header: Object.keys(headers),
+          data,
+          filename: '员工信息表',
+          multiHeader,
+          merges
+        })
+      })
+    },
+    // this method is responsible for converting the array into two dimensions
+    formatJson (headers, rows) {
+      return rows.map(item => {
+        // convert headers to an array
+        return Object.keys(headers).map(key => {
+          // judge field
+          if (headers[key] === 'timeOfEntry' || headers[key] === 'correctionTime') {
+            // formatting time
+            return formatDate(item[headers[key]])
+          } else if (headers[key] === 'formOfEmployment') {
+            // formatting the hiring situation
+            const obj = EmployeeEnum.hireType.find(obj => obj.id === item[headers[key]])
+            return obj ? obj.value : '未知'
+          }
+          return item[headers[key]]
         })
       })
     }
