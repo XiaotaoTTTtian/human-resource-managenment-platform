@@ -27,3 +27,11 @@ export function addEmployee(data) {
     data
   })
 }
+// batch import of employees
+export function importEmployeee(data) {
+  return request({
+    url: '/sys/user/batch',
+    method: 'POST',
+    data
+  })
+}
