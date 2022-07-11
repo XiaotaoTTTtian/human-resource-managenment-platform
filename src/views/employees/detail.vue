@@ -85,6 +85,7 @@ export default {
   watch: {},
   created () {
     this.getUserDetailById()
+    console.log(this.userId)
   },
   mounted () { },
   methods: {
@@ -94,14 +95,10 @@ export default {
     },
     // save user information
     async saveUser () {
-      try {
-        // manual check form
-        await this.$refs.userForm.validate()
-        await saveUserDetailById({ ...this.userInfo, password: this.userInfo.password2 })
-        this.$message.success('保存成功')
-      } catch (error) {
-        console.log(error)
-      }
+      // manual check form
+      await this.$refs.userForm.validate()
+      await saveUserDetailById({ ...this.userInfo, password: this.userInfo.password2 })
+      this.$message.success('保存成功')
     }
   }
 }

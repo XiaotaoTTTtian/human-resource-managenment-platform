@@ -232,6 +232,7 @@
 
 </template>
 <script>
+import { getEmployeeSimple, updateJob, getJobDetail } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 export default {
   name: 'JobInfo',
@@ -274,12 +275,26 @@ export default {
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    this.getJobDetail()
+    this.getEmployeeSimple()
+  },
   mounted () { },
   methods: {
-    saveJob () {
-      console.log('save practice information')
+    // save job information
+    async saveJob () {
+      await updateJob(this.formData)
+      this.$message.success('保存岗位信息')
+    },
+    // obtain user position information
+    async getJobDetail () {
+      this.formData = await getJobDetail(this.userId)
+    },
+    // get a list of employees
+    async getEmployeeSimple () {
+      this.depts = await getEmployeeSimple()
     }
+
   }
 }
 </script>

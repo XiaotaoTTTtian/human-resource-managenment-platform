@@ -83,7 +83,7 @@
         <el-col :span="12">
           <el-button
             type="primary"
-            @click="saveUser"
+            @click="saveUserDetailById"
           >保存更新</el-button>
           <el-button @click="$router.back()">返回</el-button>
 
@@ -442,7 +442,7 @@
           <el-col :span="12">
             <el-button
               type="primary"
-              @click="savePersonal"
+              @click="updatePersonal"
             >保存更新</el-button>
             <el-button @click="$router.back()">返回</el-button>
           </el-col>
@@ -455,6 +455,8 @@
 </template>
 <script>
 import EmployeeEnum from '@/api/constant/employees'
+import { getPersonalDetail, updatePersonal, saveUserDetailById } from '@/api/employees'
+import { getUserPhotoById } from '@/api/user'
 export default {
   name: 'UserInfo',
   components: {},
@@ -531,14 +533,29 @@ export default {
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    this.getPersonalDetail()
+    this.getUserDetailById()
+    console.log(this.userId)
+  },
   mounted () { },
   methods: {
-    saveUser () {
-      console.log('update click')
+    // access to employee data
+    async getPersonalDetail () {
+      this.formData = await getPersonalDetail(this.userId)
     },
-    savePersonal () {
-      console.log('communication information')
+    // updating user data
+    async updatePersonal () {
+      await updatePersonal(this.formData)
+      this.$message.success('保存成功')
+    },
+    async getUserDetailById () {
+      this.userInfo = await getUserPhotoById(this.userId)
+    },
+    // example modify user details
+    async saveUserDetailById () {
+      await saveUserDetailById(this.userInfo)
+      this.$message.success('保存成功')
     }
   }
 }
