@@ -6,14 +6,25 @@ export default {
   name: 'employees',
   component: Layout,
   // the level-2 routing table is configured
-  children: [{
+  children: [
+    {
     // defaule child routes
-    path: '',
-    component: () => import('@/views/employees'),
-    // routing meta information -- store data onject
-    meta: {
-      title: '员工管理',
-      icon: 'people'
+      path: '',
+      component: () => import('@/views/employees'),
+      // routing meta information -- store data onject
+      meta: {
+        title: '员工管理',
+        icon: 'people'
+      }
+    },
+    {
+      path: 'detail/:id', // params传参 动态路由传参
+      name: 'detail',
+      component: () => import('@/views/employees/detail'),
+      hidden: true, // 不在左侧菜单显示
+      meta: {
+        title: '员工详情' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
+      }
     }
-  }]
+  ]
 }
