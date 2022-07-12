@@ -4,6 +4,16 @@
     class="dashboard-container"
   >
     <div class="app-container">
+      <el-row
+        type="flex"
+        justify="end"
+      >
+        <el-button
+          v-print="{id: 'myPrint'}"
+          size="small"
+          type="primary"
+        >打印</el-button>
+      </el-row>
       <el-card>
         <el-breadcrumb
           separator="/"
