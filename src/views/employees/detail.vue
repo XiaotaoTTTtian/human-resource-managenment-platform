@@ -85,7 +85,6 @@ export default {
   watch: {},
   created () {
     this.getUserDetailById()
-    console.log(this.userId)
   },
   mounted () { },
   methods: {

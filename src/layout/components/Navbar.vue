@@ -65,6 +65,11 @@ export default {
   components: {
     Hamburger
   },
+  data () {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -83,11 +88,6 @@ export default {
       await this.$store.dispatch('user/logout')
       // return to login page
       this.$router.push('/login')
-    }
-  },
-  data () {
-    return {
-      defaultImg: require('@/assets/common/head.jpg')
     }
   }
 }

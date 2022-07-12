@@ -70,7 +70,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-
+            <image-upload ref="staffPhoto" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -112,6 +112,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <image-upload ref="myStaffPhoto" />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select
@@ -536,26 +537,41 @@ export default {
   created () {
     this.getPersonalDetail()
     this.getUserDetailById()
-    console.log(this.userId)
   },
   mounted () { },
   methods: {
     // access to employee data
     async getPersonalDetail () {
       this.formData = await getPersonalDetail(this.userId)
+      if (this.formData.staffPhoto) {
+        this.$refs.myStaffPhoto.fileList = [{ url: this.formData.staffPhoto, upload: true }]
+      }
     },
     // updating user data
     async updatePersonal () {
-      await updatePersonal(this.formData)
+      const fileList = this.$refs.myStaffPhoto.fileList
+      if (fileList.some(item => !item.upload)) {
+        this.$message.warning('您当前图片还没有上传！')
+      }
+      await updatePersonal({ ...this.formData, staffPhoto: fileList && fileList.length ? fileList[0].url : ' ' })
       this.$message.success('保存成功')
     },
     async getUserDetailById () {
       this.userInfo = await getUserPhotoById(this.userId)
+      if (this.userInfo.staffPhoto) {
+        this.$refs.staffPhoto.fileList = [{ url: this.userInfo.staffPhoto, upload: true }]
+      }
     },
     // example modify user details
     async saveUserDetailById () {
-      await saveUserDetailById(this.userInfo)
-      this.$message.success('保存成功')
+      // read the picture uploaded by employees
+      const fileList = this.$refs.staffPhoto.fileList
+      if (fileList.some(item => !item.upload)) {
+        this.$message.warning('您当前图片还没上传完成！')
+        return
+      }
+      await saveUserDetailById({ ...this.userInfo, staffPhoto: fileList && fileList.length ? fileList[0].url : ' ' })
+      this.$message.success('保存基本信息成功')
     }
   }
 }

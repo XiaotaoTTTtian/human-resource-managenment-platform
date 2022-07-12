@@ -1,11 +1,13 @@
 <template>
-  <div class="salary">工资</div>
+  <div class="salary">工资
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Salary',
-  components: {},
+  components: {
+  },
   props: {},
   data () {
     return {
