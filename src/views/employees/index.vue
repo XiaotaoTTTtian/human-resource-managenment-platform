@@ -48,6 +48,7 @@
               :src="row.staffPhoto"
               alt=""
               style="border-radius: 50%; width: 100px; height: 100px; padding: 10px"
+              @click="showQrCode(row.staffPhoto)"
             >
           </template>
         </el-table-column>
@@ -120,6 +121,18 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- two-dimensional code elastic layer -->
+      <el-dialog
+        title="二维码"
+        :visible.sync="showCodeDialog"
+      >
+        <el-row
+          type="flex"
+          justify="center"
+        >
+          <canvas ref="myCanvas" />
+        </el-row>
+      </el-dialog>
       <!-- 分页组件 -->
       <el-row
         type="flex"
@@ -148,6 +161,7 @@ import { getEmployeeList, addEmployee, delEmployee } from '@/api/employees'
 import { formatDate } from '@/filters'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee.vue'
+import QrCode from 'qrcode'
 export default {
   name: 'Employee',
   components: {
@@ -163,7 +177,8 @@ export default {
         size: 10,
         total: 0
       },
-      isShowDialog: false
+      isShowDialog: false,
+      showCodeDialog: false
     }
   },
   computed: {},
@@ -287,6 +302,20 @@ export default {
           return item[headers[key]]
         })
       })
+    },
+    // control the display and diding of two-dimensional code
+    showQrCode (url) {
+      // the opo-up layer is displayed only if the url exists
+      if (url) {
+        this.showCodeDialog = true
+        // $nextTic -- next hook function
+        this.$nextTick(() => {
+          // translate the address into a OR code
+          QrCode.toCanvas(this.$refs.myCanvas, url)
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
     }
   }
 }
