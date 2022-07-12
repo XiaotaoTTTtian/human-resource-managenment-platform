@@ -227,6 +227,16 @@
         >保存更新</el-button>
         <el-button @click="$router.back()">返回</el-button>
       </el-form-item>
+      <el-row
+        type="flex"
+        justify="end"
+      >
+        <el-tooltip content="打印岗位信息">
+          <router-link :to="{ name: 'print', params: { id: userId } }">
+            <i class="el-icon-printer" />
+          </router-link>
+        </el-tooltip>
+      </el-row>
     </el-form>
   </div>
 
