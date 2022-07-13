@@ -112,6 +112,7 @@
             <el-button
               type="text"
               size="small"
+              @click="editRole(row.id)"
             >角色</el-button>
             <el-button
               type="text"
@@ -151,6 +152,11 @@
     </el-card>
     <!-- new employee pop-up layer -->
     <AddEmployee v-model="isShowDialog" />
+    <AssingRole
+      ref="assignRole"
+      v-model="showRoleDialog"
+      :user-id="userId"
+    />
     <button @click="addEmployees">新增员工</button>
     <button @click="stopFn">停止</button>
   </div>
@@ -161,11 +167,13 @@ import { getEmployeeList, addEmployee, delEmployee } from '@/api/employees'
 import { formatDate } from '@/filters'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee.vue'
+import AssingRole from './components/assing-role.vue'
 import QrCode from 'qrcode'
 export default {
   name: 'Employee',
   components: {
-    AddEmployee
+    AddEmployee,
+    AssingRole
   },
   props: {},
   data () {
@@ -178,7 +186,9 @@ export default {
         total: 0
       },
       isShowDialog: false,
-      showCodeDialog: false
+      showCodeDialog: false,
+      showRoleDialog: false,
+      userId: null
     }
   },
   computed: {},
@@ -316,6 +326,12 @@ export default {
       } else {
         this.$message.warning('该用户还未上传头像')
       }
+    },
+    // assing-role
+    async editRole (id) {
+      this.userId = id
+      await this.$refs.assignRole.getUserRoleById(id)
+      this.showRoleDialog = true
     }
   }
 }

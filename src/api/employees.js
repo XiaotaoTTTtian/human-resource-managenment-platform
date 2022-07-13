@@ -71,3 +71,11 @@ export function updateJob(data) {
     data
   })
 }
+// assign toles to users
+export function assignRoles(data) {
+  return request({
+    url: '/sys/user/assignRoles',
+    method: 'put',
+    data
+  })
+}
