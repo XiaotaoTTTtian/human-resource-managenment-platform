@@ -95,6 +95,7 @@
             <el-button
               type="text"
               size="small"
+              :disabled="!checkPermission('POINT-USER-UPDATE')"
               @click="$router.push({ name: 'detail', params: { id: row.id } })"
             >查看</el-button>
             <el-button

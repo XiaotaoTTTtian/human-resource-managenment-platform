@@ -15,18 +15,24 @@ router.beforeEach(async function(to, from, next) {
   nProgress.start()
   // is there a token
   if (store.getters.token) {
-    // check whether vuex has a user ID
-    if (!store.getters.userId) {
-      // obtaining user information
-      await store.dispatch('user/getUserInfo')
-    }
     // is it on the login page
     if (to.path === '/login') {
       // jump to home page
       next('/')
     } else {
+      // check whether vuex has a user ID
+      if (!store.getters.userId) {
+      // obtaining user information
+        const { roles } = await store.dispatch('user/getUserInfo')
+        // filter the dynamic routes that meet the requirements
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        // add dynamic routes to the routing table
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
+        next(to.path)
+      } else {
       // permit through
-      next()
+        next()
+      }
     }
   } else {
     // there is no token

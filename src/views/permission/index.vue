@@ -121,6 +121,7 @@ export default {
     },
     // edit permission
     async editPermission (id) {
+      console.log(id)
       // obtain details by id
       this.formData = await getPermissionDetail(id)
       this.showDialog = true

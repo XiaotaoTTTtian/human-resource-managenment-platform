@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserPhotoById } from '@/api/user'
+import { resetRouter } from '@/router'
 // state
 const state = {
   // example set the initial token information
@@ -58,6 +59,11 @@ const actions = {
     context.commit('removeToken')
     // delete user information
     context.commit('removeUserInfo')
+    // reset the routing
+    resetRouter()
+    // the parent module calls the action of the child module
+    // {root: true} -- indicates that the current context is not a child module but a parent module
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 export default {

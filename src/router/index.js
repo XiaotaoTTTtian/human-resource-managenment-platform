@@ -8,6 +8,7 @@ import permission from './modules/permission'
 import salarys from './modules/salarys'
 import setting from './modules/setting'
 import social from './modules/social'
+import userRouter from './modules/user'
 
 Vue.use(Router)
 
@@ -70,7 +71,8 @@ export const constantRoutes = [
       path: '',
       component: () => import('@/views/import')
     }]
-  }
+  },
+  userRouter
   // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true }
 ]
@@ -90,7 +92,7 @@ const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   // merge all routes
-  routes: [...constantRoutes, ...asyncRoutes]
+  routes: [...constantRoutes]
 })
 
 const router = createRouter()

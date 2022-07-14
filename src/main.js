@@ -30,6 +30,9 @@ Vue.use(Component)
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import checkPermission from '@/mixin/checkPermission'
+// indicates that all component have a method to check
+Vue.mixin(checkPermission)
 
 /**
  * If you don't want to use mock-server
