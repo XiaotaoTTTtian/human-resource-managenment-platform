@@ -79,7 +79,9 @@ export default {
     },
     // sure to save
     async confirmFn () {
+      // assign role information to users
       await assignRoles({ id: this.userId, roleIds: this.roleIds })
+      // update the view
       this.$emit('input', false)
     }
   }
