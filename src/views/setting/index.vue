@@ -40,6 +40,7 @@
                   <el-button
                     size="small"
                     type="success"
+                    @click="assignPerm(row.id)"
                   >分配权限</el-button>
                   <el-button
                     size="small"
@@ -115,6 +116,7 @@
             </el-form>
           </el-tab-pane>
         </el-tabs>
+        <!-- edit and add ammo layers -->
         <el-dialog
           :title="isEditTitle"
           :visible="showDialog"
@@ -158,6 +160,13 @@
             </el-col>
           </el-row>
         </el-dialog>
+        <!-- assign permission to elastic layer -->
+        <assign-permission
+          v-model="showAssignDialog"
+          :perm-data="permData"
+          :select-check="selectCheck"
+          :role-id="roleId"
+        />
       </el-card>
     </div>
     <button @click="addRoleFn">测试</button>
@@ -167,9 +176,14 @@
 
 <script>
 import { getRoleList, addRole, getCompanyInfo, deleteRole, getRoleDetail, updateRole } from '@/api/setting'
+import { getPermissionList } from '@/api/permission'
+import { tranListToTreeData } from '@/utils'
+import AssignPermission from './components/assignPermission.vue'
 export default {
   name: 'CompanySet',
-  components: {},
+  components: {
+    AssignPermission
+  },
   props: {},
   data () {
     return {
@@ -184,7 +198,11 @@ export default {
       roleForm: {},
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }]
-      }
+      },
+      showAssignDialog: false,
+      permData: [],
+      roleId: null,
+      selectCheck: [] // nodes that have been selected
     }
   },
   computed: {
@@ -198,6 +216,13 @@ export default {
       handler (val) {
         if (val === false) {
           this.roleForm = {}
+        }
+      }
+    },
+    showAssignDialog: {
+      handler (val) {
+        if (val === false) {
+          this.selectCheck = []
         }
       }
     }
@@ -285,6 +310,16 @@ export default {
       } catch (error) {
         this.$message.error('编辑失败')
       }
+    },
+    // authority of distribution
+    async assignPerm (id) {
+      // get the full permission list and convert it to tree data
+      this.permData = tranListToTreeData(await getPermissionList(), '0')
+      this.showAssignDialog = true
+      // id of currently clicked role
+      this.roleId = id
+      const { permIds } = await getRoleDetail(id)
+      this.selectCheck = permIds
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <page-tools :show-before="true">
-      <span slot="before">共166条记录</span>
+      <span slot="before">共{{ page.total }}条记录</span>
       <template #after>
         <el-button
           size="small"

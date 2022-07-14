@@ -1,7 +1,7 @@
 <template>
   <!-- 放置一个弹层 用来编辑新增节点 -->
   <el-dialog
-    title="新增权限"
+    :title="showText"
     :visible="value"
     @close="$emit('input', false)"
   >
@@ -86,7 +86,11 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    showText () {
+      return this.formData.id ? '编辑权限' : '新增权限'
+    }
+  },
   watch: {
     value: {
       handler (val) {
