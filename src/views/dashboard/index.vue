@@ -5,11 +5,15 @@
       <div>
         <div class="fl headL">
           <div class="headImg">
-            <img src="@/assets/common/head.jpg">
+            <img
+              v-imageerror="defaultImg"
+              :src="userInfo.staffPhoto"
+            >
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">早安，管理员，祝你开心每一天！</p>
-            <p class="lastChild">早安，管理员，祝你开心每一天！</p>
+            <p class="firstChild">早安，{{ userInfo.username }}，祝你开心每一天！</p>
+            <p class="lastChild">{{ userInfo.username }} |
+              {{ userInfo.company }}-{{ userInfo.departmentName }} </p>
           </div>
         </div>
         <div class="fr" />
@@ -143,14 +147,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
+  },
+  created () {
+    // console.log(this.userInfo)
+  },
+  data () {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
+  },
+  methods: {
   }
 }
 </script>
