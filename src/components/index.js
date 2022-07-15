@@ -5,6 +5,7 @@ import ImageUpload from './ImageUpload'
 import Print from 'vue-print-nb'
 import ScreenFull from './ScreenFull'
 import ThemePicker from './ThemePicker'
+import LangSelect from './lang'
 export default {
   install(Vue) {
     // registration tool component
@@ -15,7 +16,10 @@ export default {
     Vue.component('ImageUpload', ImageUpload)
     // introduce full-screen components
     Vue.component('ScreenFull', ScreenFull)
+    // dynamic theme component
     Vue.component('ThemePicker', ThemePicker)
+    // multilinggual component
+    Vue.component('LangSelect', LangSelect)
     // register print component
     Vue.use(Print)
   }

@@ -11,6 +11,7 @@
     </div>
 
     <div class="right-menu">
+      <lang-select class="right-menu-item-screen" />
       <theme-picker class="right-menu-item-screen" />
       <screen-full class="right-menu-item-screen" />
       <el-dropdown
