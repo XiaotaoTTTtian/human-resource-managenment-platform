@@ -70,8 +70,8 @@ export function suspend(params) {
 export function startProcess(data) {
   return request({
     url: `/user/process/startProcess`,
-    data,
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 export function applyeLave(data) {

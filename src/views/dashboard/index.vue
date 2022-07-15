@@ -38,6 +38,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <work-calendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -96,11 +97,25 @@
             <span>流程申请</span>
           </div>
           <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
+            <el-button
+              class="sideBtn"
+              @click="showAprovalDialog=true"
+            >加班离职</el-button>
             <el-button class="sideBtn">请假调休</el-button>
-            <el-button class="sideBtn">审批列表</el-button>
-            <el-button class="sideBtn">我的信息</el-button>
+            <el-button
+              class="sideBtn"
+              @click="$router.push('users/approvals')"
+            >审批列表</el-button>
+            <el-button
+              class="sideBtn"
+              @click="$router.push('/users/info')"
+            >我的信息</el-button>
           </div>
+          <leave-approval
+            v-model="showAprovalDialog"
+            :rule-form="ruleForm"
+            :user-info="userInfo"
+          />
         </el-card>
 
         <!-- 绩效指数 -->
@@ -112,6 +127,7 @@
             <span>绩效指数</span>
           </div>
           <!-- 放置雷达图 -->
+          <Radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
@@ -148,9 +164,16 @@
 
 <script>
 import { mapState } from 'vuex'
-
+import WorkCalendar from './components/work-calendar.vue'
+import Radar from './components/radar.vue'
+import LeaveApproval from './components/leave-approval.vue'
 export default {
   name: 'Dashboard',
+  components: {
+    WorkCalendar,
+    Radar,
+    LeaveApproval
+  },
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo
@@ -161,7 +184,14 @@ export default {
   },
   data () {
     return {
-      defaultImg: require('@/assets/common/head.jpg')
+      defaultImg: require('@/assets/common/head.jpg'),
+      showAprovalDialog: false,
+      ruleForm: {
+        exceptTime: '',
+        reason: '',
+        processKey: 'process_dimission', // 特定的审批
+        processName: '离职'
+      }
     }
   },
   methods: {
