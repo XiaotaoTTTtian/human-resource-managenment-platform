@@ -11,6 +11,7 @@
     </div>
 
     <div class="right-menu">
+      <screen-full class="right-menu-item-screen" />
       <el-dropdown
         class="avatar-container"
         trigger="click"
@@ -139,7 +140,11 @@ export default {
     &:focus {
       outline: none;
     }
-
+    .right-menu-item-screen {
+      vertical-align: middle;
+      display: inline-block;
+      margin-right: 20px;
+    }
     .right-menu-item {
       display: inline-block;
       padding: 0 8px;
