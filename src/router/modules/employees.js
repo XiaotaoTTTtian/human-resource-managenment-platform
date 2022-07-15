@@ -11,6 +11,7 @@ export default {
     // defaule child routes
       path: '',
       component: () => import('@/views/employees'),
+      name: 'employees',
       // routing meta information -- store data onject
       meta: {
         title: '员工管理',

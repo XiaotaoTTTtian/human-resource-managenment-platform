@@ -14,12 +14,12 @@ export default new VueI18n({
     // the introduce of english
     en: {
       ...elementEN,
-      customEN
+      ...customEN
     },
     // the introduction of chinese
     zh: {
       ...elementZH,
-      customZH
+      ...customZH
     }
   }
 })

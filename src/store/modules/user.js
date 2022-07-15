@@ -59,6 +59,8 @@ const actions = {
     context.commit('removeToken')
     // delete user information
     context.commit('removeUserInfo')
+    // reset multiple tabs
+    context.dispatch('tagsView/delAllViews', null, { root: true })
     // reset the routing
     resetRouter()
     // the parent module calls the action of the child module
