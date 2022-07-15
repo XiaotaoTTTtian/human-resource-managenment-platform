@@ -11,6 +11,7 @@
     </div>
 
     <div class="right-menu">
+      <theme-picker class="right-menu-item-screen" />
       <screen-full class="right-menu-item-screen" />
       <el-dropdown
         class="avatar-container"

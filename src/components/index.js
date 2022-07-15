@@ -4,6 +4,7 @@ import UploadExcel from './UploadExcel'
 import ImageUpload from './ImageUpload'
 import Print from 'vue-print-nb'
 import ScreenFull from './ScreenFull'
+import ThemePicker from './ThemePicker'
 export default {
   install(Vue) {
     // registration tool component
@@ -14,6 +15,7 @@ export default {
     Vue.component('ImageUpload', ImageUpload)
     // introduce full-screen components
     Vue.component('ScreenFull', ScreenFull)
+    Vue.component('ThemePicker', ThemePicker)
     // register print component
     Vue.use(Print)
   }
