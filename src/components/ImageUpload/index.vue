@@ -1,26 +1,26 @@
 <template>
   <div>
+    <el-upload
+      list-type="picture-card"
+      :file-list="fileList"
+      :on-preview="preview"
+      :on-remove="handleRemove"
+      :on-change="changeFile"
+      :before-upload="beforeUpload"
+      :http-request="upload"
+      action="#"
+      :class="{disabled: fileComputed}"
+    >
+      <i class="el-icon-plus" />
+    </el-upload>
     <el-progress
       v-if="showPercent"
       style="width: 180px"
       :percentage="percent"
     />
-    <el-upload
-      list-type="picture-card"
-      :limit="1"
-      action="#"
-      :on-preview="preview"
-      :class="{disabled: fileComponent}"
-      :on-remove="handleRemove"
-      :on-change="changeFile"
-      :before-upload="beforeUpload"
-      :http-request="upload"
-    >
-      <i class="el-icon-plus" />
-    </el-upload>
-
+    <!-- 预览图片 -->
     <el-dialog
-      title="图片"
+      title="预览图片"
       :visible.sync="showDialog"
     >
       <img
@@ -41,7 +41,12 @@ const cos = new COS({
 export default {
   name: 'ImageUpload',
   components: {},
-  props: {},
+  props: {
+    limit: {
+      type: Number,
+      default: 1
+    }
+  },
   data () {
     return {
       fileList: [], // 图片地址设置为数组
@@ -53,8 +58,8 @@ export default {
   },
   computed: {
     // determine if one has already been uploaded
-    fileComponent () {
-      return this.fileList.length === 1
+    fileComputed () {
+      return this.fileList.length === this.limit
     }
   },
   watch: {
@@ -65,19 +70,24 @@ export default {
   methods: {
     // hook when you click on an uploaded file in the file list
     preview (file) {
+      console.log('preview')
       this.imgUrl = file.url
       this.showDialog = true
     },
     // delete file
     handleRemove (file) {
-      this.fileList = this.fileList.filter(item => item.uid !== file.id)
+      console.log(file)
+      this.fileList = this.fileList.filter(item => item.uid !== file.uid)
     },
     // add file
     changeFile (file, fileList) {
+      console.log('switch')
+      console.log(fileList)
       this.fileList = fileList.map(item => item)
     },
     // check before uploading
     beforeUpload (file) {
+      console.log('beforeUpload')
       // check file type
       const types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png']
       if (!types.some(item => item === file.type)) {
@@ -140,8 +150,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style >
 .disabled .el-upload--picture-card {
-  display: none;
+  display: none !important;
 }
 </style>

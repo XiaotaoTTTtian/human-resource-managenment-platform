@@ -392,7 +392,7 @@
 
 <script>
 import { getPersonalDetail, getJobDetail } from '@/api/employees'
-import { getUserDetailById } from '@/api/user'
+import { getUserPhotoById } from '@/api/user'
 export default {
   name: 'Print',
   components: {},
@@ -414,7 +414,7 @@ export default {
       this.formData = await getPersonalDetail(this.userId)
     },
     async getJobDetail () {
-      const userInfo = await getUserDetailById(this.userId)
+      const userInfo = await getUserPhotoById(this.userId)
       const JobInfo = await getJobDetail(this.userId)
       this.formData = { ...userInfo, ...JobInfo }
     }

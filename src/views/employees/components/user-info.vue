@@ -57,7 +57,10 @@
       <el-row class="inline-info">
         <el-col :span="12">
           <el-form-item label="手机">
-            <el-input v-model="userInfo.mobile" />
+            <el-input
+              v-model="userInfo.mobile"
+              disabled
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -81,7 +84,10 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-            <image-upload ref="staffPhoto" />
+            <image-upload
+              ref="staffPhoto"
+              :picture="userInfo.staffPhoto"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -123,7 +129,10 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
-          <image-upload ref="myStaffPhoto" />
+          <image-upload
+            ref="myStaffPhoto"
+            :limit="5"
+          />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select
